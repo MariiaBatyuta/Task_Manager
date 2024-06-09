@@ -8,6 +8,7 @@ import fs from "fs";
 import path from "path";
 
 import authRouter from "./routes/authRoutes.js";
+import dashboardRouter from "./routes/dashboardRoutes.js";
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/users", authRouter);
+app.use("/api/dashboard", dashboardRouter);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

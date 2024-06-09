@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "title": "Task Manager API",
     "description": "API documentation for Task Manager",
     "license": {
@@ -28,6 +28,10 @@
     {
       "name": "Theme",
       "description": "User theme endpoints"
+    },
+    {
+      "name": "Need Help",
+      "description": "Need Help endpoints"
     }
   ],
   "paths": {
@@ -285,6 +289,48 @@
           }
         }
       }
+    },
+    "/dashboard/need-help": {
+      "post": {
+        "tags": ["Need Help"],
+        "summary": "Need help endpoint",
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Need help object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Need_Help_Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Message sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Need_Help_Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Message must include any text",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "404": {
+            "description": "User not found",
+            "content": {}
+          }
+        }
+      }
     }
   },
   "components": {
@@ -293,11 +339,11 @@
         "type": "object",
         "required": ["name", "email", "password"],
         "properties": {
-            "name": {
-                "type": "string",
-                "description": "User name",
-                "example": "12345678"
-            },
+          "name": {
+            "type": "string",
+            "description": "User name",
+            "example": "12345678"
+          },
           "email": {
             "type": "string",
             "description": "User's email",
@@ -306,38 +352,25 @@
           "password": {
             "type": "string",
             "description": "User's password",
-            "example": "qwerty123"
+            "example": "12345678"
           }
         }
       },
       "Registration_Response": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string",
-            "description": "User's name"
-          },
-          "email": {
-            "type": "string",
-            "description": "User's email",
-            "format": "email"
-          },
-          "password": {
-            "type": "string",
-            "description": "User's password"
-          },
-          "token": {
-            "type": "string",
-            "description": "JWT token"
-          },
-          "theme": {
-            "type": "string",
-            "description": "User's theme",
-            "enum": ["light", "dark", "violet"]
-          },
-          "photo": {
-            "type": "string",
-            "description": "Path to user's avatar"
+          "user": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "User name"
+              },
+              "email": {
+                "type": "string",
+                "description": "User email"
+              }
+            }
           }
         }
       },
@@ -353,7 +386,7 @@
           "password": {
             "type": "string",
             "description": "User's password",
-            "example": "qwerty123"
+            "example": "12345678"
           }
         }
       },
@@ -461,18 +494,42 @@
       "Theme_Response": {
         "type": "object",
         "properties": {
-            "theme": {
-                "type": "string",
-                "description": "User saved theme"
-            }
+          "theme": {
+            "type": "string",
+            "description": "User saved theme"
+          }
         }
       },
-      "securitySchemes": {
-        "Bearer": {
-          "type": "http",
-          "scheme": "bearer",
-          "bearerFormat": "JWT"
+      "Need_Help_Request": {
+        "type": "object",
+        "required": ["email", "message"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "message": {
+            "type": "string",
+            "description": "Help message"
+          }
         }
+      },
+      "Need_Help_Response": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Response message"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }

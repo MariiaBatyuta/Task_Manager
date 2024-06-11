@@ -24,8 +24,12 @@ export const userRegister = async (req, res, next) => {
             email: email.toLowerCase(),
             password: passwordHash,
         });
+        
+        const token = jwt.sign({ id: createdUser._id, email: createdUser.email }, process.env.JWT_SECRET);
 
-        res.status(201).send(createdUser);
+        const userWithToken = await User.findByIdAndUpdate(createdUser._id, { token }, {new: true});
+
+        res.status(201).send(userWithToken);
     } catch (error) {
         next(error);
     }
@@ -48,21 +52,22 @@ export const userLogin = async (req, res, next) => {
 
         const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET);
 
-        await User.findByIdAndUpdate(user._id, { token });
+        const userWithToken = await User.findByIdAndUpdate(user._id, { token }, {new: true});
 
-        res.status(200).send({ token });
+        res.status(200).send(userWithToken);
     } catch (error) {
         next(error);
     }
 };
+
 export const userLogout = async (req, res, next) => {
     try {
-        const user = User.findById(req.user.id);
+        const user = await User.findById(req.user.id);
         if (!user) return res.status(401).send({ message: "Not authorized!" });
 
         await User.findByIdAndUpdate(req.user.id, { token: null });
 
-        res.status(204).send({ message: "No content" });
+        res.status(200).send({name: user.name});
     } catch (error) {
         next(error);
     }

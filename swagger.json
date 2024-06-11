@@ -115,6 +115,16 @@
         "summary": "User logout",
         "security": [{ "Bearer": [] }],
         "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Logout_Response"
+                }
+              }
+            }
+          },
           "204": {
             "description": "Successful operation",
             "content": {}
@@ -369,7 +379,11 @@
               "email": {
                 "type": "string",
                 "description": "User email"
-              }
+              },
+              "token": {
+            "type": "string",
+            "description": "JWT token"
+          }
             }
           }
         }
@@ -393,10 +407,27 @@
       "Login_Response": {
         "type": "object",
         "properties": {
+          "name": {
+                "type": "string",
+                "description": "User name"
+              },
+              "email": {
+                "type": "string",
+                "description": "User email"
+              },
           "token": {
             "type": "string",
             "description": "JWT token"
           }
+        }
+      },
+      "Logout_Response": {
+        "type": "object",
+        "properties": {
+          "name": {
+                "type": "string",
+                "description": "User name"
+              }
         }
       },
       "Get_User_Information": {

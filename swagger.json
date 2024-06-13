@@ -30,6 +30,22 @@
       "description": "User theme endpoints"
     },
     {
+      "name": "Board",
+      "description": "Board endpoints"
+    },
+    {
+      "name": "Column",
+      "description": "Column endpoints"
+    },
+    {
+      "name": "Card",
+      "description": "Card endpoints"
+    },
+    {
+      "name": "Status Filter",
+      "description": "Filter endpoint"
+    },
+    {
       "name": "Need Help",
       "description": "Need Help endpoints"
     }
@@ -290,7 +306,7 @@
             }
           },
           "400": {
-            "description": "Incorrect theme type",
+            "description": "Invalid theme data",
             "content": {}
           },
           "401": {
@@ -300,13 +316,616 @@
         }
       }
     },
-    "/dashboard/need-help": {
+    "/getBoard/{id}": {
+      "get": {
+        "tags": ["Board"],
+        "summary": "Get a board by ID",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the board to get"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Board"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Board not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/getBoards": {
+      "get": {
+        "tags": ["Board"],
+        "summary": "Get all boards",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Board"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Boards not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/board": {
       "post": {
-        "tags": ["Need Help"],
-        "summary": "Need help endpoint",
+        "tags": ["Board"],
+        "summary": "Create a new board",
         "security": [{ "Bearer": [] }],
         "requestBody": {
-          "description": "Need help object",
+          "description": "Board creation object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/New_Board"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Board"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid board data",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/editBoard/{id}": {
+      "put": {
+        "tags": ["Board"],
+        "summary": "Update a board by ID",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the board to update"
+          }
+        ],
+        "requestBody": {
+          "description": "Board update object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Edit_Board"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Board"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid board data",
+            "content": {}
+          },
+          "404": {
+            "description": "Board not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/deleteBoard/{id}": {
+      "delete": {
+        "tags": ["Board"],
+        "summary": "Delete a board by ID",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the board to delete"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful operation",
+            "content": {}
+          },
+          "404": {
+            "description": "Board not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/getColumn/{id}": {
+      "get": {
+        "tags": ["Column"],
+        "summary": "Get a column by ID",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the column to get"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Column"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Column not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/getColumns": {
+      "get": {
+        "tags": ["Column"],
+        "summary": "Get all columns",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "boardId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the board from what need to get columns"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Column"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Columns not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/board/{boardId}/column": {
+      "post": {
+        "tags": ["Column"],
+        "summary": "Create a new column",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "boardId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the board to add the column to"
+          }
+        ],
+        "requestBody": {
+          "description": "Column creation object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/New_Column"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Column"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid column data",
+            "content": {}
+          },
+          "404": {
+            "description": "Board not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/editColumn/{id}": {
+      "put": {
+        "tags": ["Column"],
+        "summary": "Update a column by ID",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the column to update"
+          }
+        ],
+        "requestBody": {
+          "description": "Column update object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Edit_Column"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Column"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid column data",
+            "content": {}
+          },
+          "404": {
+            "description": "Column not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/deleteColumn/{id}": {
+      "delete": {
+        "tags": ["Column"],
+        "summary": "Delete a column by ID",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the column to delete"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful operation",
+            "content": {}
+          },
+          "404": {
+            "description": "Column not found",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/getCard/{id}": {
+      "get": {
+        "tags": ["Card"],
+        "summary": "Get a card by ID",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the card to get"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Card"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Card not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/getCards": {
+      "get": {
+        "tags": ["Card"],
+        "summary": "Get all cards",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "columnId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the column from what need to get columns"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Card"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cards not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/column/{columnId}/card": {
+      "post": {
+        "tags": ["Card"],
+        "summary": "Create a new card",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "columnId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the column to add the card to"
+          }
+        ],
+        "requestBody": {
+          "description": "Card creation object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/New_Card"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Card"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid card data",
+            "content": {}
+          },
+          "404": {
+            "description": "Column not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/editCard/{id}": {
+      "put": {
+        "tags": ["Card"],
+        "summary": "Update a card by ID",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the card to update"
+          }
+        ],
+        "requestBody": {
+          "description": "Card update object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Edit_Card"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Card"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid card data",
+            "content": {}
+          },
+          "404": {
+            "description": "Card not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/deleteCard/{id}": {
+      "delete": {
+        "tags": ["Card"],
+        "summary": "Delete a card by ID",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the card to delete"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful operation",
+            "content": {}
+          },
+          "404": {
+            "description": "Card not found",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/cards/filter/priority/{priority}": {
+      "get": {
+        "tags": ["Status Filter"],
+        "summary": "Filter cards by priority",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "priority",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Priority level to filter by"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Card"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cards not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/need-help": {
+      "post": {
+        "tags": ["Need Help"],
+        "summary": "Send a help request",
+        "requestBody": {
+          "description": "Help request object",
           "required": true,
           "content": {
             "application/json": {
@@ -318,7 +937,7 @@
         },
         "responses": {
           "200": {
-            "description": "Message sent successfully",
+            "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
@@ -328,15 +947,7 @@
             }
           },
           "400": {
-            "description": "Message must include any text",
-            "content": {}
-          },
-          "401": {
-            "description": "Not authorized",
-            "content": {}
-          },
-          "404": {
-            "description": "User not found",
+            "description": "Invalid help request",
             "content": {}
           }
         }
@@ -347,99 +958,61 @@
     "schemas": {
       "Registration_Request": {
         "type": "object",
-        "required": ["name", "email", "password"],
         "properties": {
-          "name": {
-            "type": "string",
-            "description": "User name",
-            "example": "12345678"
-          },
           "email": {
             "type": "string",
-            "description": "User's email",
             "format": "email"
           },
           "password": {
             "type": "string",
-            "description": "User's password",
-            "example": "12345678"
+            "minLength": 6
           }
-        }
+        },
+        "required": ["email", "password"]
       },
       "Registration_Response": {
         "type": "object",
         "properties": {
-          "user": {
-            "type": "object",
-            "properties": {
-              "name": {
-                "type": "string",
-                "description": "User name"
-              },
-              "email": {
-                "type": "string",
-                "description": "User email"
-              },
-              "token": {
-            "type": "string",
-            "description": "JWT token"
-          }
-            }
+          "message": {
+            "type": "string"
           }
         }
       },
       "Login_Request": {
         "type": "object",
-        "required": ["email", "password"],
         "properties": {
           "email": {
             "type": "string",
-            "description": "User's email",
             "format": "email"
           },
           "password": {
             "type": "string",
-            "description": "User's password",
-            "example": "12345678"
+            "minLength": 6
           }
-        }
+        },
+        "required": ["email", "password"]
       },
       "Login_Response": {
         "type": "object",
         "properties": {
-          "name": {
-                "type": "string",
-                "description": "User name"
-              },
-              "email": {
-                "type": "string",
-                "description": "User email"
-              },
           "token": {
-            "type": "string",
-            "description": "JWT token"
+            "type": "string"
           }
         }
       },
       "Logout_Response": {
         "type": "object",
         "properties": {
-          "name": {
-                "type": "string",
-                "description": "User name"
-              }
+          "message": {
+            "type": "string"
+          }
         }
       },
       "Get_User_Information": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string",
-            "description": "User's name"
-          },
           "email": {
             "type": "string",
-            "description": "User's email",
             "format": "email"
           }
         }
@@ -447,68 +1020,35 @@
       "User_Edit_Request": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string",
-            "description": "User's name"
-          },
           "email": {
             "type": "string",
-            "description": "User's email",
             "format": "email"
-          },
-          "password": {
-            "type": "string",
-            "description": "User's password"
           }
-        }
+        },
+        "required": ["email"]
       },
       "User_Edit_Response": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string",
-            "description": "User's name"
-          },
-          "email": {
-            "type": "string",
-            "description": "User's email",
-            "format": "email"
-          },
-          "password": {
-            "type": "string",
-            "description": "User's password"
-          },
-          "token": {
-            "type": "string",
-            "description": "JWT token"
-          },
-          "theme": {
-            "type": "string",
-            "description": "User's theme",
-            "enum": ["light", "dark", "violet"]
-          },
-          "photo": {
-            "type": "string",
-            "description": "Path to user's avatar"
+          "message": {
+            "type": "string"
           }
         }
       },
-      "Add-New_Avatar": {
+      "Avatar_Request": {
         "type": "object",
         "properties": {
           "avatar": {
-            "type": "string",
-            "format": "binary",
-            "description": "User's avatar file"
+            "type": "string"
           }
-        }
+        },
+        "required": ["avatar"]
       },
-      "Get_User_Avatar": {
+      "Avatar_Response": {
         "type": "object",
         "properties": {
-          "avatar": {
-            "type": "string",
-            "description": "Path to user's avatar"
+          "message": {
+            "type": "string"
           }
         }
       },
@@ -517,41 +1057,180 @@
         "properties": {
           "theme": {
             "type": "string",
-            "enum": ["light", "dark", "violet"],
-            "description": "Theme type"
+            "enum": ["light", "dark"]
           }
-        }
+        },
+        "required": ["theme"]
       },
       "Theme_Response": {
         "type": "object",
         "properties": {
-          "theme": {
-            "type": "string",
-            "description": "User saved theme"
+          "message": {
+            "type": "string"
           }
         }
       },
       "Need_Help_Request": {
         "type": "object",
-        "required": ["email", "message"],
         "properties": {
           "email": {
             "type": "string",
-            "description": "User's email",
             "format": "email"
           },
           "message": {
-            "type": "string",
-            "description": "Help message"
+            "type": "string"
           }
-        }
+        },
+        "required": ["email", "message"]
       },
       "Need_Help_Response": {
         "type": "object",
         "properties": {
           "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Board": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string"
+          },
+          "background": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "columns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Column"
+            }
+          }
+        }
+      },
+      "New_Board": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string"
+          },
+          "background": {
+            "type": "string"
+          }
+        },
+        "required": ["title", "icon", "background"]
+      },
+      "Edit_Board": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string"
+          },
+          "background": {
+            "type": "string"
+          }
+        }
+      },
+      "Column": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "cards": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Card"
+            }
+          }
+        }
+      },
+      "New_Column": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": ["title"]
+      },
+      "Edit_Column": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          }
+        }
+      },
+      "Card": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "string"
+          },
+          "deadline": {
             "type": "string",
-            "description": "Response message"
+            "format": "date-time"
+          }
+        }
+      },
+      "New_Card": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": ["title", "description"]
+      },
+      "Edit_Card": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "string"
+          },
+          "deadline": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       }

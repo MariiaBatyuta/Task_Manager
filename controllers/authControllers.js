@@ -47,7 +47,7 @@ export const userLogin = async (req, res, next) => {
         const user = await User.findOne({ email: email.toLowerCase() });
         if (!user) return res.status(401).send({ message: "Email or password is wrong" });
 
-        const passwordMatch = bcrypt.compare(password, user.password);
+        const passwordMatch = await bcrypt.compare(password, user.password);
         if (!passwordMatch) return res.status(401).send({ message: "Email or password is wrong" });
 
         const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET);

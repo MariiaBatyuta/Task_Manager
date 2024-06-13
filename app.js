@@ -18,7 +18,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/users", authRouter);
-app.use("/api/dashboard", dashboardRouter);
+app.use("/api", dashboardRouter);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

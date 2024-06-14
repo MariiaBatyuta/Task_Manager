@@ -64,8 +64,12 @@ export const deleteBoard = async (req, res, next) => {
         const board = await Board.findOneAndDelete({ _id: id, owner: req.user.id });
         if (!board) return res.status(404).send({ message: "Board not found" });
 
-        await Column.deleteMany({ owner: id });
+        const columns = await Column.find({ owner: id });
+        const columnIds = columns.map(column => column._id);
 
+        await Card.deleteMany({ owner: { $in: columnIds } });
+        await Column.deleteMany({ owner: id });
+        
         res.status(204).send();
     } catch (error) {
         next(error);

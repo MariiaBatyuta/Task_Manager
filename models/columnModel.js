@@ -10,7 +10,7 @@ const columnSchema = new mongoose.Schema({
         ref: 'Board',
         required: true,
     },
-    cards: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Card' }], 
+    cards: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Card' }],  
 },
 {
     versionKey: false,

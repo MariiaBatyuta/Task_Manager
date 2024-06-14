@@ -152,10 +152,12 @@ const { id } = req.params;
     }
 };
 
+// cards
+
 export const getTheCard = async (req, res, next) => {
     const { id } = req.params;
     try {
-        const card = await Card.findOne({ _id: id, owner: req.user.id });
+        const card = await Card.findById(id);
         if (!card) return res.status(404).send({ message: "Card not found" });
 
         res.status(200).send(card);
@@ -164,20 +166,34 @@ export const getTheCard = async (req, res, next) => {
     }
 };
 
-export const getAllCards = async (req, res, next) => {
-const { columnId } = req.params;
-    try {
-        const cards = await Card.find({ owner: columnId });
-        if (!cards) return res.status(404).send({ message: "Cards not found" });
 
-        res.status(200).send(cards);
+export const getAllCards = async (req, res, next) => {
+    try {
+        const boards = await Board.find({ owner: req.user.id }).populate({
+            path: 'columns',
+            populate: { path: 'cards' }
+        });
+
+        if (!boards || boards.length === 0) return res.status(404).send({ message: "Boards not found" });
+
+        let allCards = [];
+        boards.forEach(board => {
+            board.columns.forEach(column => {
+                allCards = allCards.concat(column.cards);
+            });
+        });
+
+        if (allCards.length === 0) return res.status(404).send({ message: "Cards not found" });
+
+        res.status(200).send(allCards);
     } catch (error) {
         next(error);
     }
 };
 
+
 export const addNewCard = async (req, res, next) => {
-    const { title, description } = req.body;
+    const { title, description, priority, deadline } = req.body;
     const { columnId } = req.params;
     try {
         if (Object.keys(req.body).length === 0) return res.status(400).send({ message: "You need add some information in request" });
@@ -189,6 +205,8 @@ export const addNewCard = async (req, res, next) => {
             title,
             description,
             owner: columnId,
+            priority,
+            deadline,
         });
 
         column.cards.push(card._id);

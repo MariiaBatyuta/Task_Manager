@@ -15,7 +15,7 @@ const boardSchema = new mongoose.Schema({
     },
     owner: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'user',
+        ref: 'User',  
         required: true,
     },
     columns: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Column' }], 

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const columnModel = mongoose.Schema({
+const columnSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
@@ -17,4 +17,4 @@ const columnModel = mongoose.Schema({
     timestamps: true,
 });
 
-export default mongoose.model('column', columnModel);
+export default mongoose.model('Column', columnSchema);

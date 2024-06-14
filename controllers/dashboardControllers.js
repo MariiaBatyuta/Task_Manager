@@ -1,5 +1,4 @@
 import { sendMail } from "../mail.js";
-import User from "../models/usersModel.js";
 import Board from "../models/boardModel.js";
 import Column from "../models/columnModel.js";
 import Card from "../models/cardModel.js";
@@ -16,6 +15,7 @@ export const getTheBoard = async (req, res, next) => {
         next(error);
     }
 };
+
 export const getAllBoards = async (req, res, next) => {
     try {
         const boards = await Board.find({ owner: req.user.id });
@@ -81,7 +81,7 @@ export const deleteBoard = async (req, res, next) => {
 export const getTheColumn = async(req, res, next) => {
 const { id } = req.params;
     try {
-        const column = await Column.findOne({ _id: id, owner: req.user.id });
+        const column = await Column.findOne({ _id: id });
         if (!column) return res.status(404).send({ message: "Column not found" });
 
         res.status(200).send(column);

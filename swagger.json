@@ -249,10 +249,7 @@
           "description": "Avatar upload object",
           "required": true,
           "content": {
-            "multipart/form-data": {
-              "schema": {
-                "$ref": "#/components/schemas/Add-New_Avatar"
-              }
+            "multipart/form-data": {}
             }
           }
         },
@@ -878,8 +875,6 @@
         }
       }
     },
-    
-     
     "/cards/filter/priority/{priority}": {
       "get": {
         "tags": ["Status Filter"],
@@ -949,8 +944,7 @@
           }
         }
       }
-    }
-  },
+    },
   "components": {
     "schemas": {
       "Registration_Request": {
@@ -1230,6 +1224,14 @@
 "format": "date-time"
 }
 }
+},
+"Get_User_Avatar": {
+  "type": "object",
+  "properties":{
+    "avatar": {
+      "type": "string"
+    }
+  }
 }
 },
     "securitySchemes": {

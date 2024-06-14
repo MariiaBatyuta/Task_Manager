@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const cardModel = mongoose.Schema({
+const cardSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
@@ -25,4 +25,4 @@ const cardModel = mongoose.Schema({
     timestamps: true,
 });
 
-export default mongoose.model('card', cardModel);
+export default mongoose.model('card', cardSchema);

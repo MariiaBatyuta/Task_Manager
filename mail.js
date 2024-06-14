@@ -5,7 +5,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 export const sendMail = (email, userMessage) => {
     const message = {
-        to: "mbatyuta1997@ukr.net",
+        to: "23122000na@gmail.com",
         from: "mashabatyuta.work@gmail.com",
         replyTo: email,
         subject: "Need help - from Task Manager",

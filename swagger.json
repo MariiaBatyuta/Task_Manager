@@ -300,7 +300,8 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Theme_Response"
+                  "$ref"
+                                  : "#/components/schemas/Theme_Response"
                 }
               }
             }
@@ -411,82 +412,82 @@
       }
     },
     "/editBoard/{id}": {
-      "put": {
-        "tags": ["Board"],
-        "summary": "Update a board by ID",
-        "security": [{ "Bearer": [] }],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "ID of the board to update"
-          }
-        ],
-        "requestBody": {
-          "description": "Board update object",
+    "put": {
+      "tags": ["Board"],
+      "summary": "Update a board by ID",
+      "security": [{ "Bearer": [] }],
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
           "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "description": "ID of the board to update"
+        }
+      ],
+      "requestBody": {
+        "description": "Board update object",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Edit_Board"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Successful operation",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Edit_Board"
+                "$ref": "#/components/schemas/Board"
               }
             }
           }
         },
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Board"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid board data",
-            "content": {}
-          },
-          "404": {
-            "description": "Board not found",
-            "content": {}
-          }
+        "400": {
+          "description": "Invalid board data",
+          "content": {}
+        },
+        "404": {
+          "description": "Board not found",
+          "content": {}
         }
       }
-    },
-    "/deleteBoard/{id}": {
-      "delete": {
-        "tags": ["Board"],
-        "summary": "Delete a board by ID",
-        "security": [{ "Bearer": [] }],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "ID of the board to delete"
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Successful operation",
-            "content": {}
+    }
+  },
+  "/deleteBoard/{id}": {
+    "delete": {
+      "tags": ["Board"],
+      "summary": "Delete a board by ID",
+      "security": [{ "Bearer": [] }],
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
           },
-          "404": {
-            "description": "Board not found",
-            "content": {}
-          }
+          "description": "ID of the board to delete"
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "Successful operation",
+          "content": {}
+        },
+        "404": {
+          "description": "Board not found",
+          "content": {}
         }
       }
-    },
+    }
+  },
     "/getColumn/{id}": {
       "get": {
         "tags": ["Column"],
@@ -528,12 +529,7 @@
         "security": [{ "Bearer": [] }],
         "parameters": [
           {
-            "name": "boardId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "boardId": "string",
             "description": "ID of the board from what need to get columns"
           }
         ],
@@ -657,7 +653,7 @@
       }
     },
     "/deleteColumn/{id}": {
-      "delete": {
+"delete": {
         "tags": ["Column"],
         "summary": "Delete a column by ID",
         "security": [{ "Bearer": [] }],
@@ -684,7 +680,7 @@
         }
       }
     },
-
+    
     "/getCard/{id}": {
       "get": {
         "tags": ["Card"],
@@ -706,7 +702,7 @@
             "description": "Successful operation",
             "content": {
               "application/json": {
-                "schema": {
+                "schema" : {
                   "$ref": "#/components/schemas/Card"
                 }
               }
@@ -726,7 +722,7 @@
         "security": [{ "Bearer": [] }],
         "parameters": [
           {
-            "name": "columnId",
+             "name": "id",
             "in": "path",
             "required": true,
             "schema": {
@@ -855,7 +851,7 @@
       }
     },
     "/deleteCard/{id}": {
-      "delete": {
+       "delete": {
         "tags": ["Card"],
         "summary": "Delete a card by ID",
         "security": [{ "Bearer": [] }],
@@ -882,7 +878,8 @@
         }
       }
     },
-
+    
+     
     "/cards/filter/priority/{priority}": {
       "get": {
         "tags": ["Status Filter"],
@@ -1032,209 +1029,209 @@
         "properties": {
           "message": {
             "type": "string"
-          }
-        }
-      },
-      "Avatar_Request": {
-        "type": "object",
-        "properties": {
-          "avatar": {
-            "type": "string"
-          }
-        },
-        "required": ["avatar"]
-      },
-      "Avatar_Response": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "Theme_Request": {
-        "type": "object",
-        "properties": {
-          "theme": {
-            "type": "string",
-            "enum": ["light", "dark"]
-          }
-        },
-        "required": ["theme"]
-      },
-      "Theme_Response": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "Need_Help_Request": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "format": "email"
-          },
-          "message": {
-            "type": "string"
-          }
-        },
-        "required": ["email", "message"]
-      },
-      "Need_Help_Response": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "Board": {
-        "type": "object",
-        "properties": {
-          "_id": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "icon": {
-            "type": "string"
-          },
-          "background": {
-            "type": "string"
-          },
-          "owner": {
-            "type": "string"
-          },
-          "columns": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Column"
-            }
-          }
-        }
-      },
-      "New_Board": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string"
-          },
-          "icon": {
-            "type": "string"
-          },
-          "background": {
-            "type": "string"
-          }
-        },
-        "required": ["title", "icon", "background"]
-      },
-      "Edit_Board": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string"
-          },
-          "icon": {
-            "type": "string"
-          },
-          "background": {
-            "type": "string"
-          }
-        }
-      },
-      "Column": {
-        "type": "object",
-        "properties": {
-          "_id": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "owner": {
-            "type": "string"
-          },
-          "cards": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Card"
-            }
-          }
-        }
-      },
-      "New_Column": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string"
-          }
-        },
-        "required": ["title"]
-      },
-      "Edit_Column": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string"
-          }
-        }
-      },
-      "Card": {
-        "type": "object",
-        "properties": {
-          "_id": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "priority": {
-            "type": "string"
-          },
-          "deadline": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "New_Card": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          }
-        },
-        "required": ["title", "description"]
-      },
-      "Edit_Card": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "priority": {
-            "type": "string"
-          },
-          "deadline": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      }
-    },
+}
+}
+},
+"Avatar_Request": {
+"type": "object",
+"properties": {
+"avatar": {
+"type": "string"
+}
+},
+"required": ["avatar"]
+},
+"Avatar_Response": {
+"type": "object",
+"properties": {
+"message": {
+"type": "string"
+}
+}
+},
+"Theme_Request": {
+"type": "object",
+"properties": {
+"theme": {
+"type": "string",
+"enum": ["light", "dark"]
+}
+},
+"required": ["theme"]
+},
+"Theme_Response": {
+"type": "object",
+"properties": {
+"message": {
+"type": "string"
+}
+}
+},
+"Need_Help_Request": {
+"type": "object",
+"properties": {
+"email": {
+"type": "string",
+"format": "email"
+},
+"message": {
+"type": "string"
+}
+},
+"required": ["email", "message"]
+},
+"Need_Help_Response": {
+"type": "object",
+"properties": {
+"message": {
+"type": "string"
+}
+}
+},
+"Board": {
+"type": "object",
+"properties": {
+"_id": {
+"type": "string"
+},
+"title": {
+"type": "string"
+},
+"icon": {
+"type": "string"
+},
+"background": {
+"type": "string"
+},
+"owner": {
+"type": "string"
+},
+"columns": {
+"type": "array",
+"items": {
+"$ref": "#/components/schemas/Column"
+}
+}
+}
+},
+"New_Board": {
+"type": "object",
+"properties": {
+"title": {
+"type": "string"
+},
+"icon": {
+"type": "string"
+},
+"background": {
+"type": "string"
+}
+},
+"required": ["title", "icon", "background"]
+},
+"Edit_Board": {
+"type": "object",
+"properties": {
+"title": {
+"type": "string"
+},
+"icon": {
+"type": "string"
+},
+"background": {
+"type": "string"
+}
+}
+},
+"Column": {
+"type": "object",
+"properties": {
+"_id": {
+"type": "string"
+},
+"title": {
+"type": "string"
+},
+"owner": {
+"type": "string"
+},
+"cards": {
+"type": "array",
+"items": {
+"$ref": "#/components/schemas/Card"
+}
+}
+}
+},
+"New_Column": {
+"type": "object",
+"properties": {
+"title": {
+"type": "string"
+}
+},
+"required": ["title"]
+},
+"Edit_Column": {
+"type": "object",
+"properties": {
+"title": {
+"type": "string"
+}
+}
+},
+"Card": {
+"type": "object",
+"properties": {
+"_id": {
+"type": "string"
+},
+"title": {
+"type": "string"
+},
+"description": {
+"type": "string"
+},
+"priority": {
+"type": "string"
+},
+"deadline": {
+"type": "string",
+"format": "date-time"
+}
+}
+},
+"New_Card": {
+"type": "object",
+"properties": {
+"title": {
+"type": "string"
+},
+"description": {
+"type": "string"
+}
+},
+"required": ["title", "description"]
+},
+"Edit_Card": {
+"type": "object",
+"properties": {
+"title": {
+"type": "string"
+},
+"description": {
+"type": "string"
+},
+"priority": {
+"type": "string"
+},
+"deadline": {
+"type": "string",
+"format": "date-time"
+}
+}
+}
+},
     "securitySchemes": {
       "Bearer": {
         "type": "http",
@@ -1242,5 +1239,6 @@
         "bearerFormat": "JWT"
       }
     }
-  }
 }
+}
+

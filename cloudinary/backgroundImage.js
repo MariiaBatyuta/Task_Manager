@@ -7,7 +7,7 @@ export const getBackgroundUrls = async (publicId) => {
             tablet: null,
             phone: null,
         };
-    }ж
+    };
 
     const folders = ['laptop', 'tablet', 'phone'];
     const urls = {};

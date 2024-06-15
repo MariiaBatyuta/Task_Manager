@@ -27,13 +27,15 @@ export const getAllBoards = async (req, res, next) => {
         next(error);
     }
 };
-
 export const addNewBoard = async (req, res, next) => {
     const { title, icon, background } = req.body;
+    const allowedBackground = ["default", "sakura", "nightMoutains", "greatTree", "newMoon", "leaves", "clouds", "seaSunset", "3d", "mars", "jacht", "aerostatViev", "canyon", "seabed", "aerostat", "starCamping"];
+
     try {
-        if (!title) {
-            return res.status(400).send({ message: "You need to add some information in the request" });
-        }
+        if (!title) return res.status(400).send({ message: "You need to add some information in the request" });
+        if (!background) return res.status(400).send({ message: "Background is required" });
+        if (!allowedBackground.includes(background)) return res.status(400).send({ message: "Incorrect background type" });
+
 
         const backgroundUrls = await getBackgroundUrls(background);
 
@@ -178,24 +180,10 @@ export const getTheCard = async (req, res, next) => {
 
 
 export const getAllCards = async (req, res, next) => {
+    const { columnId } = req.body;
     try {
-        const boards = await Board.find({ owner: req.user.id }).populate({
-            path: 'columns',
-            populate: { path: 'cards' }
-        });
-
-        if (!boards || boards.length === 0) return res.status(404).send({ message: "Boards not found" });
-
-        let allCards = [];
-        boards.forEach(board => {
-            board.columns.forEach(column => {
-                allCards = allCards.concat(column.cards);
-            });
-        });
-
-        if (allCards.length === 0) return res.status(404).send({ message: "Cards not found" });
-
-        res.status(200).send(allCards);
+        const cards = await Card.find({ owner: columnId });
+        res.status(200).send(cards);
     } catch (error) {
         next(error);
     }

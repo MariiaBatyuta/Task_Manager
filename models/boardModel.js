@@ -10,7 +10,6 @@ const boardSchema = new mongoose.Schema({
         default: null,
     },
     background: {
-        enum: ["default", "sakura", "nightMoutains", "greatTree", "newMoon", "leaves", "clouds", "seaSunset", "3d", "mars", "jacht", "aerostatViev", "canyon", "seabed", "aerostat", "starCamping"],
         laptop: { type: String, default: null },
         tablet: { type: String, default: null },
         phone: { type: String, default: null },

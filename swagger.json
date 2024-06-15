@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "1.0.1",
+    "version": "2.0.4",
     "title": "Task Manager API",
     "description": "API documentation for Task Manager",
     "license": {
@@ -564,6 +564,22 @@
             "description": "ID of the board from what need to get columns"
           }
         ],
+        "requestBody": {
+          "description": "Column update object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "boardId": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -762,6 +778,22 @@
             "description": "ID of the column from what need to get columns"
           }
         ],
+        "requestBody": {
+          "description": "Column update object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "columnId": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successful operation",

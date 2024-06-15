@@ -103,8 +103,14 @@ const { id } = req.params;
 };
 
 export const getAllColumns = async (req, res, next) => {
-    const { boardId } = req.params;
+    const { boardId } = req.body;
     try {
+        const boards = await Board.find({ owner: req.user.id });
+        if (!boards) return res.status(404).send({ message: "Board not found" });
+        const boardIds = Array.from(boards).map(board => board._id);
+
+        if (!boardIds.toString().includes(boardId)) return res.status(404).send({ message: "This board does not belong to the user" });
+
         const columns = await Column.find({ owner: boardId });
         res.status(200).send(columns);
     } catch (error) {
@@ -182,7 +188,19 @@ export const getTheCard = async (req, res, next) => {
 export const getAllCards = async (req, res, next) => {
     const { columnId } = req.body;
     try {
+        const board = await Board.find({ owner: req.user.id });
+        if (!board) return res.status(404).send({ message: "Board not found" });
+        const boardIds = Array.from(board).map(board => board._id);
+
+        const columns = await Column.find({ owner: { $in: boardIds } });
+        if (!columns || columns.length === 0) return res.status(404).send({ message: "Columns not found" });
+        const columnIds = Array.from(columns).map(column => column._id);
+
+        if (!columnIds.toString().includes(columnId)) return res.status(404).send({ message: "This column does not belong to the user" });
+
         const cards = await Card.find({ owner: columnId });
+        if (!cards || cards.length === 0) return res.status(404).send({ message: "Cards not found" });
+
         res.status(200).send(cards);
     } catch (error) {
         next(error);
@@ -247,19 +265,21 @@ export const deleteCard = async (req, res, next) => {
 
 export const filteredByPriority = async (req, res, next) => {
     const { priority } = req.params;
+    const availablePriority = ["low", "medium", "high", "without"];
     try {
-        const board = await Board.findOne({ owner: req.user.id });
+        if (!availablePriority.includes(priority)) return res.status(404).send({ message: "That priority type doesn't exist" });
+            
+        const board = await Board.find({ owner: req.user.id });
         if (!board) return res.status(404).send({ message: "Board not found" });
+        const boardIds = Array.from(board).map(board => board._id);
 
-        const columns = await Column.find({ _id: { $in: board.columns } });
-        if (!columns) return res.status(404).send({ message: "Columns not found" });
-
-        const columnIds = columns.map(column => column._id);
-
-        const cards = await Card.find({ owner: { $in: columnIds }, priority });
-        if (!cards) return res.status(404).send({ message: "Cards not found" });
-
+        const columns = await Column.find({ owner: { $in: boardIds } });
+        if (!columns || columns.length === 0) return res.status(404).send({ message: "Columns not found" });
+        const columnIds = Array.from(columns).map(column => column._id);
         
+        const cards = await Card.find({ owner: { $in: columnIds }, priority });
+        if (!cards || cards.length === 0) return res.status(404).send({ message: "Cards whit that priority not found" });
+
         res.status(200).send(cards);
     } catch (error) {
         next(error);

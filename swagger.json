@@ -42,7 +42,7 @@
       "description": "Card endpoints"
     },
     {
-      "name": "Status Filter",
+      "name": "Priority Filter",
       "description": "Filter endpoint"
     },
     {
@@ -944,7 +944,7 @@
 
     "/cards/filter/priority/{priority}": {
       "get": {
-        "tags": ["Status Filter"],
+        "tags": ["Priority Filter"],
         "summary": "Filter cards by priority",
         "security": [{ "Bearer": [] }],
         "parameters": [

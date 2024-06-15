@@ -69,12 +69,13 @@ export const deleteBoard = async (req, res, next) => {
 
         await Card.deleteMany({ owner: { $in: columnIds } });
         await Column.deleteMany({ owner: id });
-        
+
         res.status(204).send();
     } catch (error) {
         next(error);
     }
 };
+
 
 // columns 
 

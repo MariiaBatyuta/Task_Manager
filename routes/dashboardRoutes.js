@@ -1,6 +1,7 @@
+// dashboardRoutes.js
 import express from "express";
-import { authMiddleware } from "../middleware/authMiddleware.js";
 import { needHelp, getTheBoard, getAllBoards, addNewBoard, editBoard, deleteBoard, getTheColumn, getAllColumns, addNewColumn, editColumn, deleteColumn, getTheCard, getAllCards, addNewCard, editCard, deleteCard, filteredByPriority } from "../controllers/dashboardControllers.js";
+import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const dashboardRouter = express.Router();
 const jsonParser = express.json();
@@ -14,7 +15,7 @@ dashboardRouter.delete("/deleteBoard/:id", jsonParser, authMiddleware, deleteBoa
 
 // Columns
 dashboardRouter.get("/getColumn/:id", jsonParser, authMiddleware, getTheColumn);
-dashboardRouter.get("/getColumns", jsonParser, authMiddleware, getAllColumns);
+dashboardRouter.get("/getColumns",jsonParser, authMiddleware, getAllColumns);
 dashboardRouter.post("/board/:boardId/column", jsonParser, authMiddleware, addNewColumn);
 dashboardRouter.put("/editColumn/:id", jsonParser, authMiddleware, editColumn);
 dashboardRouter.delete("/deleteColumn/:id", jsonParser, authMiddleware, deleteColumn);

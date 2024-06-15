@@ -67,11 +67,12 @@ export const userLogout = async (req, res, next) => {
 
         await User.findByIdAndUpdate(req.user.id, { token: null });
 
-        res.status(200).send({name: user.name});
+        res.status(200).send({ message: "Logout successful" });
     } catch (error) {
         next(error);
     }
 };
+
 
 // get and update user information
 
@@ -82,36 +83,41 @@ export const userGetInfo = async (req, res, next) => {
 
         const { name, email } = user;
 
-        res.status(200).send({name, email});
+        res.status(200).send({ name, email });
     } catch (error) {
         next(error);
     }
-}
+};
 
 export const userUpdate = async (req, res, next) => {
-    const updateInfo = {
-        name: req.body.name,
-        email: req.body.email,
-        password: await bcrypt.hash(req.body.password, 10),
-    }
-
     try {
-        if (Object.keys(updateInfo).length === 0) return res.status(400).send({ message: "Body must have at least one field" });
+        const { name, email, password } = req.body;
 
-        const { error } = userUpdateInfo.validate(updateInfo);
-        if(error) return res.status(400).send({message: error.message});
+        if (!name && !email && !password) {
+            return res.status(400).send({ message: "Body must have at least one field" });
+        }
+
+        const updateInfo = {};
+        if (name) updateInfo.name = name;
+        if (email) updateInfo.email = email;
+        if (password) updateInfo.password = await bcrypt.hash(password, 10);
 
         const user = await User.findById(req.user.id);
-        if (!user) return read.status(401).send({ message: "Not authorized!" });
+        if (!user) {
+            return res.status(401).send({ message: "Not authorized!" });
+        }
 
-        const updateUser = await User.findByIdAndUpdate(req.user.id, updateInfo, { new: true });
-        if (!updateUser) return res.status(404).send({ message: "Not found!" });
+        const updatedUser = await User.findByIdAndUpdate(req.user.id, updateInfo, { new: true });
+        if (!updatedUser) {
+            return res.status(404).send({ message: "Not found!" });
+        }
 
-        res.status(200).send(updateUser);
+        res.status(200).send(updatedUser);
     } catch (error) {
         next(error);
     }
 }
+
 
 // user avatar
 export const userPhoto = async (req, res, next) => {

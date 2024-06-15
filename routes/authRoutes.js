@@ -1,5 +1,5 @@
 import express from "express";
-import { userLogin, userLogout, userRegister, userGetInfo, userUpdate, userUpdatePhoto, userPhoto, userUpdateTheme } from "../controllers/authControllers.js";
+import { userLogin, userLogout, userRegister, userGetInfo, userUpdate, userUpdatePhoto, userPhoto, userGetTheme, userUpdateTheme } from "../controllers/authControllers.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 import { avatarMiddleware } from "../middleware/avatarMiddleware.js";
 
@@ -16,6 +16,7 @@ authRouter.put("/edit", authMiddleware, userUpdate);
 authRouter.get("/avatar", authMiddleware, userPhoto);
 authRouter.put("/edit-avatar", authMiddleware, avatarMiddleware, userUpdatePhoto);
 
+authRouter.get("/getTheme", authMiddleware, userGetTheme);
 authRouter.patch("/theme", authMiddleware, userUpdateTheme);
 
 export default authRouter;

@@ -27,7 +27,7 @@ export const userRegister = async (req, res, next) => {
         
         const token = jwt.sign({ id: createdUser._id, email: createdUser.email }, process.env.JWT_SECRET);
 
-        const userWithToken = await User.findByIdAndUpdate(createdUser._id, { token }, {new: true});
+        const userWithToken = await User.findByIdAndUpdate(createdUser._id, { token }, { new: true }).select('-password');
 
         res.status(201).send(userWithToken);
     } catch (error) {
@@ -52,7 +52,7 @@ export const userLogin = async (req, res, next) => {
 
         const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET);
 
-        const userWithToken = await User.findByIdAndUpdate(user._id, { token }, {new: true});
+        const userWithToken = await User.findByIdAndUpdate(user._id, { token }, {new: true}).select('-password');
 
         res.status(200).send(userWithToken);
     } catch (error) {
@@ -146,6 +146,17 @@ export const userUpdatePhoto = async (req, res, next) => {
 };
 
 // user change theme
+
+export const userGetTheme = async (req, res, next) => {
+   try {
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(401).send({ message: "Not authorized" });
+
+        res.status(200).send({theme: user.theme});
+    } catch (error) {
+        next(error);
+    }
+}
 
 export const userUpdateTheme = async (req, res, next) => {
     const allowedTheme = ["light", "dark", "violet"];

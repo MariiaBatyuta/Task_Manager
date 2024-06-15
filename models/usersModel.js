@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
     },
     photo: {
         type: String,
-        default: null,
+        default: "https://res.cloudinary.com/taskmanagerphoto/image/upload/user.png",
     }
 },
     {

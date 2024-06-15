@@ -3,6 +3,7 @@ import Board from "../models/boardModel.js";
 import Column from "../models/columnModel.js";
 import Card from "../models/cardModel.js";
 import { needHelpSchema } from "../schemas/needHelpSchemas.js";
+import { getBackgroundUrls } from "../cloudinary/backgroundImage.js";
 
 export const getTheBoard = async (req, res, next) => {
     const { id } = req.params;
@@ -30,12 +31,20 @@ export const getAllBoards = async (req, res, next) => {
 export const addNewBoard = async (req, res, next) => {
     const { title, icon, background } = req.body;
     try {
-        if (Object.keys(req.body).length === 0) return res.status(400).send({ message: "You need add some information in request" });
+        if (!title) {
+            return res.status(400).send({ message: "You need to add some information in the request" });
+        }
+
+        const backgroundUrls = await getBackgroundUrls(background);
 
         const board = await Board.create({
             title,
             icon,
-            background,
+            background: {
+                laptop: backgroundUrls['laptop'],
+                tablet: backgroundUrls['tablet'],
+                phone: backgroundUrls['phone'],
+            },
             owner: req.user.id,
         });
 

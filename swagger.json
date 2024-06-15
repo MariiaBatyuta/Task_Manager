@@ -155,7 +155,7 @@
     "/users/info": {
       "get": {
         "tags": ["User"],
-        "summary": "Get user information",
+        "summary": "Get user information for changing that at modal window",
         "security": [{ "Bearer": [] }],
         "responses": {
           "200": {
@@ -269,6 +269,33 @@
           },
           "400": {
             "description": "No file uploaded",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/users/getTheme": {
+      "patch": {
+        "tags": ["Theme"],
+        "summary": "Get user theme",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Theme_Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid theme data",
             "content": {}
           },
           "401": {
@@ -528,7 +555,12 @@
         "security": [{ "Bearer": [] }],
         "parameters": [
           {
-            "boardId": "string",
+            "name": "boardId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
             "description": "ID of the board from what need to get columns"
           }
         ],
@@ -721,7 +753,7 @@
         "security": [{ "Bearer": [] }],
         "parameters": [
           {
-            "name": "id",
+            "name": "columnId",
             "in": "path",
             "required": true,
             "schema": {
@@ -985,10 +1017,6 @@
             "type": "string",
             "format": "email"
           },
-          "password": {
-            "type": "string",
-            "example": "123456lsdvldvl21313213"
-          },
           "token": {
             "type": "string",
             "example": "bkjk232323-wv22r23rvsd-2r2k2k3"
@@ -1039,10 +1067,6 @@
           "email": {
             "type": "string",
             "format": "email"
-          },
-          "password": {
-            "type": "string",
-            "example": "123456lsdvldvl21313213"
           },
           "token": {
             "type": "string",
@@ -1214,7 +1238,18 @@
             "type": "string"
           },
           "background": {
-            "type": "string"
+            "type": "object",
+            "properties": {
+                "laptop": {
+                    "type": "string"
+                },
+                "tablet": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                }
+            }
           },
           "owner": {
             "type": "string"
@@ -1237,7 +1272,8 @@
             "type": "string"
           },
           "background": {
-            "type": "string"
+            "type": "string",
+            "enum": ["default", "sakura", "nightMoutains", "greatTree", "newMoon", "leaves", "clouds", "seaSunset", "3d", "mars", "jacht", "aerostatViev", "canyon", "seabed", "aerostat", "starCamping"]
           }
         },
         "required": ["title", "icon", "background"]
@@ -1253,8 +1289,7 @@
           },
           "background": {
             "type": "string"
-          }
-        }
+        }}
       },
       "Column": {
         "type": "object",

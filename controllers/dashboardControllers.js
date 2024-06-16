@@ -186,7 +186,6 @@ export const getTheCard = async (req, res, next) => {
 
 
 export const getAllCards = async (req, res, next) => {
-    const { columnId } = req.body;
     try {
         const board = await Board.find({ owner: req.user.id });
         if (!board) return res.status(404).send({ message: "Board not found" });
@@ -196,9 +195,7 @@ export const getAllCards = async (req, res, next) => {
         if (!columns || columns.length === 0) return res.status(404).send({ message: "Columns not found" });
         const columnIds = Array.from(columns).map(column => column._id);
 
-        if (!columnIds.toString().includes(columnId)) return res.status(404).send({ message: "This column does not belong to the user" });
-
-        const cards = await Card.find({ owner: columnId });
+        const cards = await Card.find({ owner: {$in: columnIds} });
         if (!cards || cards.length === 0) return res.status(404).send({ message: "Cards not found" });
 
         res.status(200).send(cards);

@@ -767,33 +767,6 @@
         "tags": ["Card"],
         "summary": "Get all cards",
         "security": [{ "Bearer": [] }],
-        "parameters": [
-          {
-            "name": "columnId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "ID of the column from what need to get columns"
-          }
-        ],
-        "requestBody": {
-          "description": "Column update object",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "columnId": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Successful operation",

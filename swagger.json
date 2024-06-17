@@ -279,7 +279,7 @@
       }
     },
     "/users/getTheme": {
-      "patch": {
+      "get": {
         "tags": ["Theme"],
         "summary": "Get user theme",
         "security": [{ "Bearer": [] }],

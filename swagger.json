@@ -609,7 +609,7 @@
         "parameters": [
           {
             "name": "boardId",
-            "in": "query",
+            "in": "path",
             "required": true,
             "schema": {
               "type": "string"
@@ -796,7 +796,7 @@
         "parameters": [
           {
             "name": "columnId",
-            "in": "query",
+            "in": "path",
             "required": true,
             "schema": {
               "type": "string"

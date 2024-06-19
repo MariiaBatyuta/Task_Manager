@@ -63,7 +63,11 @@ export const editBoard = async (req, res, next) => {
         const board = await Board.findOneAndUpdate({ _id: id, owner: req.user.id }, { title, icon, background }, { new: true });
         if (!board) return res.status(404).send({ message: "Board not found" });
 
-        res.status(200).send(board);
+        const backgroundUrls = await getBackgroundUrls(background);
+
+        const boardWithUrls = {...board.toObject(), background: backgroundUrls}
+
+        res.status(200).send(boardWithUrls);
     } catch (error) {
         next(error);
     }

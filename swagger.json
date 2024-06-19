@@ -1286,6 +1286,9 @@
       "Edit_Board": {
         "type": "object",
         "properties": {
+          "_id": {
+            "type": "string"
+          },
           "title": {
             "type": "string"
           },
@@ -1293,8 +1296,29 @@
             "type": "string"
           },
           "background": {
+            "type": "object",
+            "properties": {
+                "laptop": {
+                    "type": "string"
+                },
+                "tablet": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                }
+            }
+          },
+          "owner": {
             "type": "string"
-        }}
+          },
+          "columns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Column"
+            }
+          }
+        }
       },
       "Column": {
         "type": "object",

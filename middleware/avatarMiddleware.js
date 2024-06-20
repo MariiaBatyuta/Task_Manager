@@ -16,7 +16,7 @@ const storage = new CloudinaryStorage({
             return `${extname}-${suffix}`;
         },
         transformation: [
-            { width: 32, height: 32, crop: 'fill', quality: 'auto' }
+            { width: 64, height: 64, crop: 'fill', quality: 1 }
         ]
     }
 });

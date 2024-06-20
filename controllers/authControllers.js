@@ -3,7 +3,9 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 import { userRegisterSchema, userLoginSchema, userUpdateInfo } from "../schemas/authSchemas.js";
-import { read } from "fs";
+import queryString from "query-string";
+import axios from "axios";
+import URL from "url";
 
 export const userRegister = async (req, res, next) => {
     const { name, email, password } = req.body;
@@ -97,6 +99,9 @@ export const userUpdate = async (req, res, next) => {
             return res.status(400).send({ message: "Body must have at least one field" });
         }
 
+        const { error } = userUpdateInfo.validate({ name, email, password });
+        if (error) return res.status(200).send({ message: error.message });
+
         const updateInfo = {};
         if (name) updateInfo.name = name;
         if (email) updateInfo.email = email;
@@ -173,3 +178,65 @@ export const userUpdateTheme = async (req, res, next) => {
         next(error);
     }
 }
+
+// google
+export const authGoogle = (_, res) => {
+    try {
+        const params = queryString.stringify({
+            client_id: process.env.GOOGLE_CLIENT_ID,
+            redirect_uri: "https://task-manager-r8dz.onrender.com/api/users/auth/google/callback", 
+            response_type: "code",
+            scope: "profile email",
+            prompt: "consent",
+            access_type: "offline",
+        });
+
+        res.redirect(`https://accounts.google.com/o/oauth2/v2/auth?${params}`);
+    } catch (error) {
+        console.error('Error in Google OAuth redirection:', error.message);
+        res.status(500).send('Error redirecting to Google OAuth');
+    }
+};
+
+export const callbackGoogle = async (req, res, next) => {
+    const { code } = req.query;
+
+    try {
+        if (!code) {
+            throw new Error("Authorization code not provided");
+        }
+
+        const tokenResponse = await axios.post('https://oauth2.googleapis.com/token', {
+            code,
+            client_id: process.env.GOOGLE_CLIENT_ID,
+            client_secret: process.env.GOOGLE_CLIENT_SECRET,
+            redirect_uri: "https://task-manager-r8dz.onrender.com/api/users/auth/google/callback", 
+            grant_type: 'authorization_code',
+        });
+        const { access_token } = tokenResponse.data;
+
+        const userResponse = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+            headers: {
+                Authorization: `Bearer ${access_token}`,
+            },
+        });
+        const { name, email } = userResponse.data;
+
+        let user = await User.findOne({ email });
+
+        if (!user) {
+            user = await User.create({
+                name,
+                email,
+            });
+        };
+        
+        const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        await User.findByIdAndUpdate(user._id, { token }, { new: true });
+
+        res.redirect(`https://task-manager-jet-psi.vercel.app/home?token=${token}`); 
+    } catch (error) {
+        console.error('Error during Google OAuth callback:', error.message);
+        next(error);
+    }
+};

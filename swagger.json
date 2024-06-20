@@ -48,6 +48,10 @@
     {
       "name": "Need Help",
       "description": "Need Help endpoints"
+    },
+    {
+      "name": "Google authorization",
+      "description": "Google authorization endpoint"
     }
   ],
   "paths": {
@@ -982,6 +986,46 @@
           "400": {
             "description": "Invalid help request",
             "content": {}
+          }
+        }
+      }
+    },
+    "/users/auth/google": {
+      "get": {
+        "tags": ["Google authorization"],
+        "summary": "Initiates Google OAuth flow",
+        "responses": {
+          "302": {
+            "description": "Redirects to Google OAuth consent screen"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/users/auth/google/callback": {
+      "get": {
+        "tags": ["Google authorization"],
+        "summary": "Callback endpoint for Google OAuth",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Authorization code received from Google"
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Redirects to client application with access token"
+          },
+          "400": {
+            "description": "Bad request, authorization code not provided"
+          },
+          "500": {
+            "description": "Internal server error"
           }
         }
       }

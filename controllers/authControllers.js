@@ -234,7 +234,7 @@ export const callbackGoogle = async (req, res, next) => {
         const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
         await User.findByIdAndUpdate(user._id, { token }, { new: true });
 
-        res.redirect(`https://task-manager-jet-psi.vercel.app/home?token=${token}`); 
+        res.redirect(`https://task-manager-jet-psi.vercel.app/login/google?token=${token}`); 
     } catch (error) {
         console.error('Error during Google OAuth callback:', error.message);
         next(error);

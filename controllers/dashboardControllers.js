@@ -27,6 +27,7 @@ export const getAllBoards = async (req, res, next) => {
         next(error);
     }
 };
+
 export const addNewBoard = async (req, res, next) => {
     const { title, icon, background } = req.body;
     const allowedBackground = ["default", "sakura", "nightMoutains", "greatTree", "newMoon", "leaves", "clouds", "seaSunset", "3d", "mars", "jacht", "aerostatViev", "canyon", "seabed", "aerostat", "starCamping"];

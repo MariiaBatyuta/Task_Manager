@@ -27,7 +27,7 @@ export const userRegister = async (req, res, next) => {
             password: passwordHash,
         });
         
-        const token = jwt.sign({ id: createdUser._id, email: createdUser.email }, process.env.JWT_SECRET);
+        const token = jwt.sign({ id: createdUser._id, email: createdUser.email }, process.env.JWT_SECRET,  { expiresIn: '1h' });
 
         const userWithToken = await User.findByIdAndUpdate(createdUser._id, { token }, { new: true }).select('-password');
 
@@ -52,7 +52,7 @@ export const userLogin = async (req, res, next) => {
         const passwordMatch = await bcrypt.compare(password, user.password);
         if (!passwordMatch) return res.status(401).send({ message: "Email or password is wrong" });
 
-        const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET);
+        const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET,  { expiresIn: '1h' });
 
         const userWithToken = await User.findByIdAndUpdate(user._id, { token }, {new: true}).select('-password');
 
@@ -121,8 +121,7 @@ export const userUpdate = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-}
-
+};
 
 // user avatar
 export const userPhoto = async (req, res, next) => {
@@ -222,7 +221,7 @@ export const callbackGoogle = async (req, res, next) => {
         });
         const { name, email } = userResponse.data;
 
-        let user = await User.findOne({ email });
+        const user = await User.findOne({ email });
 
         if (!user) {
             user = await User.create({
